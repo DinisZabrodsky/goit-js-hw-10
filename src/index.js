@@ -17,23 +17,23 @@ function serachCounrty(event) {
     event.preventDefault();
     const value = refs.input.value;
     if (value !== '') {
-        fetchCountries(value).then(onCreateCard).catch(onFetchError)
+        fetchCountries(value).then(onCreateCard).catch(onFetchError);
     }
 };
 
 function onCreateCard(array) {
     
-    if (array.length <= 1) {
+    if (array.length === 1) {
         oneCounty(array);
-    }
-    countryList(array);
+    } else {
+        countryList(array);
+    }  
 }
 
 function countryList(array) {
 
     if (array.length > 10) {
-        Notify.info("Too many matches found. Please enter a more specific name.")
-        return;
+        return Notify.info("Too many matches found. Please enter a more specific name.")
     };
 
     const list = array.map(({ name, flags }) => {
@@ -41,12 +41,15 @@ function countryList(array) {
         <li class="card-item">
         <img class="card-img" src="${flags.svg}" alt="${flags.alt}">
         <h2 class="card-title">${name.official}</h2>
-       </li>`.join('');
-    })
+       </li>
+       `
+    }).join('')
 
-    console.log(list);
+    // console.log(list);
 
-    return refs.countryList.insertAdjacentHTML('beforeend', list);
+
+    clearPage();
+    refs.countryList.insertAdjacentHTML('beforeend', list);
 
 }
 
@@ -66,11 +69,16 @@ function oneCounty(array) {
     }).join('');
     
     // refs.countryInfo.innerHTML(country);
+    // console.log(country)
 
-    console.log(country)
-    
+    clearPage();
+    refs.countryInfo.insertAdjacentHTML('beforeend', country);
 }
 
+function clearPage() {
+    refs.countryInfo.innerHTML = '';
+    refs.countryList.innerHTML = '';
+}
 
 function onFetchError() {
     Notify.failure("Oops, there is no country with that name");
