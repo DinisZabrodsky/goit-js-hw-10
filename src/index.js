@@ -15,10 +15,13 @@ refs.input.addEventListener('input', debounce(serachCounrty, DEBOUNCE_DELAY));
 
 function serachCounrty(event) {
     event.preventDefault();
-    const value = refs.input.value;
-    if (value !== '') {
-        fetchCountries(value).then(onCreateCard).catch(onFetchError);
+    const value = refs.input.value.trim();
+    // console.log(value);
+    if (value == '' || value == ' ') {
+        return;
     }
+
+    fetchCountries(value).then(onCreateCard).catch(onFetchError);
 };
 
 function onCreateCard(array) {
